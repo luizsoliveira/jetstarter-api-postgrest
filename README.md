@@ -1,8 +1,9 @@
-# Rapid REST API development with PostgREST database(under construction...)
+# Rapid REST API development with PostgREST database (under construction...)
 
-This repository provides a functional template that allows you to build a REST API ecosystem in just 1 minute. 
+This repository provides a functional template and a tutorial that allows you to build a REST API ecosystem in just 1 minute. 
 
 ![](./doc/images/API-ecosystem-Postgrest-OverviewArchitecture.png "")
+
 *Figure 1. API overview ecosystem with Docker-compose, Postgres, PostgREST, and Swagger*
 
 In a real-world environment, a REST API does not work in isolation. Figure 1 illustrates the basic infrastructure ecosystem of a typical API that serves information persisted by a database.
@@ -26,13 +27,13 @@ docker-compose up
 
 ```
 
-The sequence of commands above fetches the microservices/containers infrastructure shown in Figure 1. After downloading the images and initializing the containers, the services are available at the following URLs:
+The sequence of commands above fetches the microservices/containers infrastructure shown in Figure 1. After downloading the images, the containers are initialized. During the Postgres first initialization the SQL scripts inside the folder **sql** are executed. On the sequence, the PostgREST is started and it automatically instrospect the database building cache schema. Finally, the services are available at the following URLs:
 
 * API documentation: http://localhost:8080/
 * Public REST endpoint: http://localhost:3000/countries
 * OpenAPI description: http://localhost:3000/
 
-PS.: Links are available only locally and after starting the containers.
+PS.: links are available only locally and after starting the containers.
 
 ## Why use PostgREST?
 
@@ -76,7 +77,7 @@ As previously mentioned, the only source of knowledge in this approach is the da
 
 Through the introspection of the structures present in the database, such as schemas, tables, relationships, views, and functions, among others, PostgREST builds a cache that is used for the dynamic generation of structures that would be equivalent to the controllers of traditional development.
 
-For the implementation of CRUD endpoints, the effort is minimal, just modeling the structures in the database, which would already be done anyway. With only the input of SQLs, PostgREST can already offer the CRUD endpoints of each entity, as well as the technical description of the API in OpenAPI format. Finally, from this description, Swagger renders the documentation page (Figure 3.
+For the implementation of CRUD endpoints, the effort is minimal, just modeling the structures in the database, which would already be done anyway. With only the input of SQLs, PostgREST can already offer the CRUD endpoints of each entity, as well as the technical description of the API in OpenAPI format. Finally, from this description, Swagger renders the documentation page (Figure 3).
 
 ![](./doc/images/swagger-example.png "")
 *Figure 3. Swagger documentation page automatically generated from the database schema*
@@ -96,6 +97,13 @@ The restriction that PostgREST will only access the schema(s) explicitly indicat
 
 In this way, the Postgres database can have numerous schemas created, but only the **api** schema (in our case) will be visible by PostgREST. PostgREST will dynamically create REST endpoints for each of the accessible tables, views, and stored procedures within the indicated schema, respecting the access permissions defined in the database.
 
+Note: A configuração do schema visível pelo PostgREST está presente no arquivo .env, que por sua vez é acessado pelo Docker-compose e repassa essa informação como variável de ambiente para o container do PostgREST. 
+
+```bash
+# List with one or more schemas that will be served as REST API by PostgREST
+PGRST_DB_SCHEMAS = "api"
+```
+
 ## Good practices for exposing REST endpoints with PostgREST
 
 A beneficial practice is not to directly expose the table in the schema visible by PostgREST. Keep your tables in a schema not reachable by PostgREST, and instead, put only views in the exposed schema.
@@ -104,7 +112,28 @@ The first advantage is that you can have the freedom to expose a subset of the d
 
 The second advantage is that you can use this indirection to manage different API versions. You can have an api-1.0 schema and another api-2.0 schema. Both schemas can coexist by creating different abstractions of the same database. This indirection provides the necessary freedom for database evolution while preserving legacy API versions.
 
+## Exposing a public REST endpoint
 
+PostgREST provides the functionality to expose public REST endpoints. In this context, public are the endpoints that can be accessed without authentication. This feature should be used with great caution and is only recommended for read-only access and non-sensitive data.
 
+To activate the resource, it is necessary to define the ROLE of the database that will be used for this public access. Only resources accessible by this ANONYMOUS ROLE will be offered in the public version of the API.
+
+```bash
+# DB role that will be used for public API access
+PGRST_DB_ANON_ROLE = "api_anon_user"
+```
+
+In addition to indicating the ROLE, it is necessary to create the respective role in the database.
+
+```sql
+-- Creates the role api_anon_user
+CREATE ROLE api_anon_user nologin;
+
+-- Allow app_user switch to api_anon_user
+GRANT api_anon_user TO app_user;
+
+-- Allow api_anon_user to use the api schema
+GRANT usage on schema api to api_anon_user;
+```
 
 
