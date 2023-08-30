@@ -11,9 +11,9 @@ services:
       # Address were the OpenAPI will be served
       PGRST_OPENAPI_SERVER_PROXY_URI: $PGRST_OPENAPI_SERVER_PROXY_URI
       # DB role that will be used for public API access
-      PGRST_DB_ANON_ROLE: "api_anon_user"
+      PGRST_DB_ANON_ROLE: ${PGRST_DB_ANON_ROLE}
       # List with one or more schemas that will be served as API by PostgREST
-      PGRST_DB_SCHEMAS: "api"
+      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS}
     depends_on:
       - postgres
     volumes:
