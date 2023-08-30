@@ -41,6 +41,7 @@ An excellent example for applying this technique can be the rapid development of
 PostgREST allows you to deploy a robust REST API with the following functionality with minimal effort:
 * CRUD basic operations
 * HTTP verbs: GET, POST, PUT, PATCH, DELETE and HEAD
+* OpenAPI description
 * Authentication
 * Horizontal filtering (selecting lines)
 * Vertical filtering (selecting columns)
@@ -49,6 +50,7 @@ PostgREST allows you to deploy a robust REST API with the following functionalit
 * Full-Text search
 * Ordering
 * Limits and Pagination
+* Resource embedding
 * Bulk insert
 * Upsert (update or insert)
 * among others
