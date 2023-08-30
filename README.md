@@ -109,6 +109,7 @@ Note: A configuração do schema visível pelo PostgREST está presente no arqui
 
 ```bash
 #Excerpt from .env file
+
 # List with one or more schemas that will be served as REST API by PostgREST
 PGRST_DB_SCHEMAS = "api"
 ```
@@ -129,6 +130,7 @@ To activate the resource, it is necessary to define the ROLE of the database tha
 
 ```bash
 #Excerpt from .env file
+
 # DB role that will be used for public API access
 PGRST_DB_ANON_ROLE = "api_anon_user"
 ```
@@ -136,6 +138,8 @@ PGRST_DB_ANON_ROLE = "api_anon_user"
 In addition to indicating the ROLE, it is necessary to create the respective role in the database.
 
 ```sql
+-- Excerpt from sql/002_schema_api_anon_access.sql file
+
 -- Creates the role api_anon_user
 CREATE ROLE api_anon_user nologin;
 
@@ -146,4 +150,16 @@ GRANT api_anon_user TO app_user;
 GRANT usage on schema api to api_anon_user;
 ```
 
+The steps for creating and populating the original table will be omitted from this tutorial, however it can be found in: [SQL script to create the Common schema](./sql/001_schema_common.sql).
 
+Once equipped with the original table, the next step is to create a view accessible as read-only by the ROLE api_anon_user. Remembering that even though it is a VIEW, it is still important to specify that access is read-only, as both Postgres and PostgREST support the [updatable views](https://www.postgresql.org/docs/current/sql-createview.html#SQL-CREATEVIEW-UPDATABLE-VIEWS) feature.
+
+```sql
+-- Excerpt from sql/002_schema_api_anon_access.sql file
+
+CREATE OR REPLACE VIEW api.countries AS
+  SELECT id, iso, name, nicename, iso3, numcode, phonecode
+  FROM common.countries;
+
+GRANT SELECT ON TABLE api.countries TO api_anon_user
+```
