@@ -35,6 +35,14 @@ The sequence of commands above fetches the microservices/containers infrastructu
 
 PS.: links are available only locally and after starting the containers.
 
+```shell
+###########################################################################
+# DISCLAIMER: The steps outlined below are cited for documentation and explanation purposes only.
+# Therefore, it is NOT necessary to run them, since the entire process of deploying the API has
+# already been carried out automatically as it is written within the Infrastructure as Code (IaC) paradigm.
+###########################################################################
+```
+
 ## Why use PostgREST?
 
 Regarding systems development, a subject that always arouses my interest is reuse and automatic code generation. There is a fair amount of project code, especially at the project's beginning, that can be generated automatically using special tools.
