@@ -101,13 +101,14 @@ During the PostgREST configuration process, it is necessary to inform which data
 
 This schema restriction, which may initially seem like a limitation, is a fundamental principle for guaranteeing the security and integrity of the information assets persisted in the database.
 
-The restriction that PostgREST will only access the schema(s) explicitly indicated guarantees isolation in which the API will only access the resources the database administrator has made available in the schema in question.
+The restriction that PostgREST will only access the schema(s) explicitly indicated guarantees isolation in which the API will only access the resources the database administrator has explicitly made available in the schema in question.
 
 In this way, the Postgres database can have numerous schemas created, but only the **api** schema (in our case) will be visible by PostgREST. PostgREST will dynamically create REST endpoints for each of the accessible tables, views, and stored procedures within the indicated schema, respecting the access permissions defined in the database.
 
 Note: A configuração do schema visível pelo PostgREST está presente no arquivo .env, que por sua vez é acessado pelo Docker-compose e repassa essa informação como variável de ambiente para o container do PostgREST. 
 
 ```bash
+#Excerpt from .env file
 # List with one or more schemas that will be served as REST API by PostgREST
 PGRST_DB_SCHEMAS = "api"
 ```
@@ -127,6 +128,7 @@ PostgREST provides the functionality to expose public REST endpoints. In this co
 To activate the resource, it is necessary to define the ROLE of the database that will be used for this public access. Only resources accessible by this ANONYMOUS ROLE will be offered in the public version of the API.
 
 ```bash
+#Excerpt from .env file
 # DB role that will be used for public API access
 PGRST_DB_ANON_ROLE = "api_anon_user"
 ```
