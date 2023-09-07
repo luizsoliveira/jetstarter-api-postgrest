@@ -10,9 +10,8 @@ CREATE TABLE "public"."users" (
 CREATE TABLE "public"."projects" (
   "id" serial PRIMARY KEY,
   "title" varchar NOT NULL,
-  "body" text,
+  "description" text,
   "owner_user_id" integer NOT NULL,
-  "status" varchar,
   "created_at" TIMESTAMP DEFAULT NOW()
 );
 
@@ -27,7 +26,7 @@ CREATE TABLE "public"."tasks" (
   "project_id" integer NOT NULL,
   "key" varchar,
   "title" varchar NOT NULL,
-  "body" text,
+  "description" text,
   "task_type_id" integer NOT NULL,
   "parameters" json,
   "results" json,
@@ -42,17 +41,17 @@ CREATE TABLE "public"."task_types" (
   "created_at" TIMESTAMP DEFAULT NOW()
 );
 
-COMMENT ON COLUMN "public"."projects"."body" IS 'Content of the project';
+COMMENT ON COLUMN "public"."projects"."description" IS 'Description of the project';
 
-COMMENT ON COLUMN "public"."tasks"."body" IS 'Content of the task';
-
-ALTER TABLE "public"."projects" ADD FOREIGN KEY ("owner_user_id") REFERENCES "public"."users" ("id");
+COMMENT ON COLUMN "public"."tasks"."description" IS 'Description of the task';
 
 ALTER TABLE "public"."project_members" ADD FOREIGN KEY ("user_id") REFERENCES "public"."users" ("id");
 
-ALTER TABLE "public"."project_members" ADD FOREIGN KEY ("user_id") REFERENCES "public"."projects" ("id");
+ALTER TABLE "public"."project_members" ADD FOREIGN KEY ("project_id") REFERENCES "public"."projects" ("id");
 
-ALTER TABLE "public"."tasks" ADD FOREIGN KEY ("id") REFERENCES "public"."projects" ("id");
+ALTER TABLE "public"."projects" ADD FOREIGN KEY ("owner_user_id") REFERENCES "public"."users" ("id");
+
+ALTER TABLE "public"."tasks" ADD FOREIGN KEY ("project_id") REFERENCES "public"."projects" ("id");
 
 ALTER TABLE "public"."tasks" ADD FOREIGN KEY ("task_type_id") REFERENCES "public"."task_types" ("id");
 
