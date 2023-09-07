@@ -11,7 +11,7 @@ CREATE TABLE "public"."projects" (
   "id" serial PRIMARY KEY,
   "title" varchar NOT NULL,
   "description" text,
-  "owner_user_id" integer NOT NULL,
+  "manager_user_id" integer NOT NULL,
   "created_at" TIMESTAMP DEFAULT NOW()
 );
 
@@ -49,7 +49,7 @@ ALTER TABLE "public"."project_members" ADD FOREIGN KEY ("user_id") REFERENCES "p
 
 ALTER TABLE "public"."project_members" ADD FOREIGN KEY ("project_id") REFERENCES "public"."projects" ("id");
 
-ALTER TABLE "public"."projects" ADD FOREIGN KEY ("owner_user_id") REFERENCES "public"."users" ("id");
+ALTER TABLE "public"."projects" ADD FOREIGN KEY ("manager_user_id") REFERENCES "public"."users" ("id");
 
 ALTER TABLE "public"."tasks" ADD FOREIGN KEY ("project_id") REFERENCES "public"."projects" ("id");
 
