@@ -16,6 +16,7 @@ CREATE TABLE "public"."projects" (
 );
 
 CREATE TABLE "public"."project_members" (
+  "id" serial PRIMARY KEY,
   "user_id" integer NOT NULL,
   "project_id" integer NOT NULL,
   "created_at" TIMESTAMP DEFAULT NOW()
@@ -54,6 +55,8 @@ ALTER TABLE "public"."projects" ADD FOREIGN KEY ("manager_user_id") REFERENCES "
 ALTER TABLE "public"."tasks" ADD FOREIGN KEY ("project_id") REFERENCES "public"."projects" ("id");
 
 ALTER TABLE "public"."tasks" ADD FOREIGN KEY ("task_type_id") REFERENCES "public"."task_types" ("id");
+
+ALTER TABLE "public"."project_members" ADD CONSTRAINT project_members_user_project_unique UNIQUE (user_id, project_id);
 
 GRANT ALL ON TABLE public.users TO api_anon_user;
 GRANT ALL ON TABLE public.projects TO api_anon_user;
