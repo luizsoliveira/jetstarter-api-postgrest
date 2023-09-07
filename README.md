@@ -83,7 +83,7 @@ Figure 2 illustrates the development flow of a REST API using the PostgREST + Sw
 
 As previously mentioned, the only source of knowledge in this approach is the database, from which all information about structures and access permissions can be obtained.
 
-Through the introspection of the structures present in the database, such as schemas, tables, relationships, views, and functions, among others, PostgREST builds a cache that is used for the dynamic generation of structures that would be equivalent to the controllers of traditional development.
+Through the introspection of the structures present in the database, such as schemas, tables, relationships, views, and functions, among others, PostgREST builds a cache that is used for the dynamic generation of structures that would be equivalent to the models and controllers of traditional development.
 
 For the implementation of CRUD endpoints, the effort is minimal, just modeling the structures in the database, which would already be done anyway. With only the input of SQLs, PostgREST can already offer the CRUD endpoints of each entity, as well as the technical description of the API in OpenAPI format. Finally, from this description, Swagger renders the documentation page (Figure 3).
 
@@ -105,7 +105,7 @@ The restriction that PostgREST will only access the schema(s) explicitly indicat
 
 In this way, the Postgres database can have numerous schemas created, but only the **api** schema (in our case) will be visible by PostgREST. PostgREST will dynamically create REST endpoints for each of the accessible tables, views, and stored procedures within the indicated schema, respecting the access permissions defined in the database.
 
-Note: A configuração do schema visível pelo PostgREST está presente no arquivo .env, que por sua vez é acessado pelo Docker-compose e repassa essa informação como variável de ambiente para o container do PostgREST. 
+Note: The schema configuration visible by PostgREST is present in the .env file, which in turn is accessed by Docker-compose and passes this information as an environment variable to the PostgREST container.
 
 ```bash
 #Excerpt from .env file
@@ -130,7 +130,6 @@ To activate the resource, it is necessary to define the ROLE of the database tha
 
 ```bash
 #Excerpt from .env file
-
 # DB role that will be used for public API access
 PGRST_DB_ANON_ROLE = "api_anon_user"
 ```
@@ -139,7 +138,6 @@ In addition to indicating the ROLE, it is necessary to create the respective rol
 
 ```sql
 -- Excerpt from sql/002_schema_api_anon_access.sql file
-
 -- Creates the role api_anon_user
 CREATE ROLE api_anon_user nologin;
 
@@ -156,7 +154,6 @@ Once equipped with the original table, the next step is to create a view accessi
 
 ```sql
 -- Excerpt from sql/002_schema_api_anon_access.sql file
-
 CREATE OR REPLACE VIEW api.countries AS
   SELECT id, iso, name, nicename, iso3, numcode, phonecode
   FROM common.countries;
