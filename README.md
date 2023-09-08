@@ -81,12 +81,12 @@ Figure 2 illustrates the development flow of a REST API using the PostgREST + Sw
 ![](https://github.com/luizsoliveira/jetstarter-api-postgrest/raw/main/doc/images/physical-database-model.png "")
 *Figure 3. Physical model of an example database*
 
-Figure 3 displays the physical model of the database used in this tutorial. Through the introspection of the structures present in the database, such as tables, columns, relationships, views, functions, and grant permissions, among others, PostgREST builds a cache that is used for the dynamic generation of structures that would be equivalent to the models and controllers writen by hand in a traditional API development. Note that in this approach, the database is not only limited to reliable data persistence but also performs the function of being the main source of knowledge from which all information about structures and access permissions can be obtained.
+Figure 3 displays the physical model of the database used in this tutorial. Through the introspection of the structures present in the database, such as tables, columns, relationships, views, functions, and grant permissions, among others, PostgREST builds a cache that is used for the dynamic generation of structures that would be equivalent to the models and controllers written by hand in traditional API development. Note that in this approach, the database is not only limited to reliable data persistence but also performs the function of being the primary source of knowledge from which all information about structures and access permissions can be obtained.
 
-For the implementation of CRUD endpoints, the effort is minimal, just modeling the structures in the database, which would already be done anyway. With only the input of SQLs, PostgREST can already offer the CRUD endpoints of each entity, as well as the technical description of the API in OpenAPI format. Finally, from this description, Swagger renders the documentation page (Figure 4).
+For the implementation of CRUD endpoints, the effort is minimal, just modeling the structures in the database, which would already be done anyway. With only the input of SQLs, PostgREST can already offer the CRUD endpoints of each entity, as well as the technical description of the API in OpenAPI format. Finally, from this API description, Swagger renders the documentation page (Figure 4).
 
 ![](https://github.com/luizsoliveira/jetstarter-api-postgrest/raw/main/doc/images/swagger-example.png "")
-*Figure 4. Swagger documentation page automatically generated from the database schema*
+*Figure 4. Swagger documentation page is automatically generated from the database schema*
 
 ## PostgREST configuration
 
