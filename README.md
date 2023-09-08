@@ -6,17 +6,17 @@ This repository provides a functional template and a tutorial that allows you to
 
 *Figure 1. API overview ecosystem with Docker-compose, Postgres, PostgREST, and Swagger*
 
-In a real-world environment, a REST API does not work in isolation. Figure 1 illustrates the basic infrastructure ecosystem of a typical API that serves information persisted by a database.
+In this documentation, we'll see how to build a REST API with CRUD operations for five entities in just 1 min. In a microservices paradigm, a REST API is part of a larger ecosystem made up of other components. Figure 1 illustrates the basic components of a typical API that serves information persisted by a relational database.
  
- * Postgres: a relational database that will perform the function of data persistence, preserving referential integrity.
- * PostgREST: Web server responsible for exposing REST endpoints and an API description according to the OpenAPI standard.
- * Swagger: service that generates an HTML documentation page from the OpenAPI description.
+ * Postgres: a relational database that will perform data persistence, preserving referential integrity;
+ * PostgREST: Web server responsible for exposing a REST API with CRUD endpoints and also a description of the API according to the OpenAPI standard;
+ * Swagger: service that automatically generates a HTML documentation page from the OpenAPI description.
 
  ## Deploying a REST API in 1 minute
  
  Unlike many tutorials available on the internet, which will require extensive step-by-step tasks to be carried out, here the entire process is automated through Infrastructure as Code (IaC) with Docker-compose.
 
- Before running the codes below, ensure you already have Docker installed and started on your computer. [Click here](https://docs.docker.com/get-docker/) for instructions how to install Docker.
+ Before running the codes below, ensure you already have Docker installed and started on your computer. [Click here](https://docs.docker.com/get-docker/) for instructions on how to install Docker.
 
 ```shell
 git clone https://github.com/luizsoliveira/jetstarter-api-postgrest
@@ -30,22 +30,27 @@ docker-compose up
 The sequence of commands above fetches the microservices/containers infrastructure shown in Figure 1. After downloading the images, the containers are initialized. During the Postgres first initialization the SQL scripts inside the folder **sql** are executed. On the sequence, the PostgREST is started and it automatically instrospect the database building cache schema. Finally, the services are available at the following URLs:
 
 * API documentation: http://localhost:8080/
-* Public REST endpoint: http://localhost:3000/countries
 * OpenAPI description: http://localhost:3000/
+* API REST CRUD endpoints:
+  * http://localhost:3000/users
+  * http://localhost:3000/projects
+  * http://localhost:3000/project_members
+  * http://localhost:3000/task_types
+  * http://localhost:3000/tasks 
 
-PS.: links are available only locally and after starting the containers.
+PS.: Links are available only locally and after starting the containers.
 
 ```shell
 ###########################################################################
 # DISCLAIMER: The steps outlined below are cited for documentation and explanation purposes only.
-# Therefore, it is NOT necessary to run them, since the entire process of deploying the API has
-# already been carried out automatically as it is written within the Infrastructure as Code (IaC) paradigm.
+# Therefore, it is NOT necessary to run them since the entire process of deploying the API
+# has already been carried out automatically as it is written within the Infrastructure as Code (IaC) paradigm.
 ###########################################################################
 ```
 
 ## Why use PostgREST?
 
-Regarding systems development, a subject that always arouses my interest is reuse and automatic code generation. There is a fair amount of project code, especially at the project's beginning, that can be generated automatically using special tools.
+Regarding systems development, a subject that always arouses my interest is code reuse and automatic code generation. There is a fair amount of boilerplate code, especially at the project's beginning, that can be easily generated automatically using special tools.
 
 An excellent example of applying this technique can be the rapid development of a REST API, a demand common to almost all projects. In this article, we will talk about PostgREST.
 
@@ -81,14 +86,15 @@ With this principle in mind, PostgREST performs a robust introspection in the da
 
 Figure 2 illustrates the development flow of a REST API using the PostgREST + Swagger ecosystem. According to the workflow above, the only necessary code input is the SQL commands responsible for defining the relational model.
 
-As previously mentioned, the only source of knowledge in this approach is the database, from which all information about structures and access permissions can be obtained.
+![](./doc/images/API-ecosystem-Postgrest-Workflow.png "")
+*Figure 3. Physical model of an example database*
 
-Through the introspection of the structures present in the database, such as schemas, tables, relationships, views, and functions, among others, PostgREST builds a cache that is used for the dynamic generation of structures that would be equivalent to the models and controllers of traditional development.
+Figure 3 displays the physical model of the database used in this tutorial. Through the introspection of the structures present in the database, such as schemas, tables, columns, relationships, views, functions, and grant permissions, among others, PostgREST builds a cache that is used for the dynamic generation of structures that would be equivalent to the models and controllers of traditional API development. Note that in this approach, the database is not only limited to data persistence but also performs the function of being the main source of knowledge from which all information about structures and access permissions can be obtained.
 
-For the implementation of CRUD endpoints, the effort is minimal, just modeling the structures in the database, which would already be done anyway. With only the input of SQLs, PostgREST can already offer the CRUD endpoints of each entity, as well as the technical description of the API in OpenAPI format. Finally, from this description, Swagger renders the documentation page (Figure 3).
+For the implementation of CRUD endpoints, the effort is minimal, just modeling the structures in the database, which would already be done anyway. With only the input of SQLs, PostgREST can already offer the CRUD endpoints of each entity, as well as the technical description of the API in OpenAPI format. Finally, from this description, Swagger renders the documentation page (Figure 4).
 
 ![](./doc/images/swagger-example.png "")
-*Figure 3. Swagger documentation page automatically generated from the database schema*
+*Figure 4. Swagger documentation page automatically generated from the database schema*
 
 ## Exposing REST endpoints
 
