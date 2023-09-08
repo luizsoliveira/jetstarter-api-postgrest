@@ -6,11 +6,11 @@ This repository provides a functional template and a tutorial that allows you to
 
 *Figure 1. API overview ecosystem with Docker-compose, Postgres, PostgREST, and Swagger*
 
-In this documentation, we'll see how to build a REST API with CRUD operations for five entities in just 1 min. In a microservices paradigm, a REST API is part of a larger ecosystem made up of other components. Figure 1 illustrates the basic components of a typical API that serves information persisted by a relational database.
+In this documentation, we'll see how to build a REST API with CRUD operations for five entities in just 1 minute. In a microservices paradigm, a REST API is part of a larger ecosystem comprising other components. Figure 1 illustrates the essential components of a typical API that serves information persisted by a relational database.
  
  * Postgres: a relational database that will perform data persistence, preserving referential integrity;
  * PostgREST: Web server responsible for exposing a REST API with CRUD endpoints and also a description of the API according to the OpenAPI standard;
- * Swagger: service that automatically generates a HTML documentation page from the OpenAPI description.
+ * Swagger: service that automatically generates an HTML documentation page from the OpenAPI description.
 
  ## Deploying a REST API in 1 minute
  
@@ -27,7 +27,7 @@ docker-compose up
 
 ```
 
-The sequence of commands above fetches the microservices/containers infrastructure shown in Figure 1. After downloading the images, the containers are initialized. During the Postgres first initialization the SQL scripts inside the folder **sql** are executed. On the sequence, the PostgREST is started and it automatically instrospect the database building cache schema. Finally, the services are available at the following URLs:
+The sequence of commands above fetches the microservices/containers infrastructure shown in Figure 1. After downloading the images, the containers are initialized. During the Postgres first initialization, the SQL scripts inside the folder [./sql](./sql/) are executed. On the sequence, the PostgREST is started, and it automatically introspects the database to build a cache schema. Finally, the services are available at the following URLs:
 
 * API documentation: http://localhost:8080/
 * OpenAPI description: http://localhost:3000/
@@ -101,17 +101,17 @@ This schema restriction, which may initially seem like a limitation, is a fundam
 
 The restriction that PostgREST will only access the schema(s) explicitly indicated guarantees isolation in which the API will only access the resources the database administrator has explicitly made available in the schema in question.
 
-In this way, the Postgres database can have numerous schemas created, but only the **public** schema (in our case) will be visible by PostgREST. PostgREST will dynamically create REST endpoints for each of the accessible tables, views, and stored procedures within the indicated schema, respecting the access permissions defined in the database.
+In this way, the Postgres database can create numerous schemas, but only the **public** schema (in our case) will be visible by PostgREST. PostgREST will dynamically create REST endpoints for each of the accessible tables, views, and stored procedures within the indicated schema, respecting the access permissions defined in the database.
 
 ```shell
-###########################################################################
+###################################################################################################################
 # DISCLAIMER: The steps outlined below are cited for documentation and explanation purposes only.
 # Therefore, it is NOT necessary to run them since the entire process of deploying the API
-# has already been carried out automatically as it is written within the Infrastructure as Code (IaC) paradigm.
-###########################################################################
+# has already been carried out automatically as it is written within the Infrastructure as Code (IaC) paradigm.   
+###################################################################################################################
 ```
 
-Note: The schema configuration visible by PostgREST is present in the .env file, which in turn is accessed by Docker-compose and passes this information as an environment variable to the PostgREST container.
+Note: The schema configuration visible by PostgREST is present in the .env file, which is accessed by Docker-compose and passes this information as an environment variable to the PostgREST container.
 
 ```bash
 #Excerpt from .env file
@@ -120,9 +120,9 @@ Note: The schema configuration visible by PostgREST is present in the .env file,
 PGRST_DB_SCHEMAS = "public"
 ```
 
-## Exposing a public REST endpoint
+## Exposing REST endpoints with anonymous access
 
-PostgREST provides the functionality to expose public REST endpoints. In this context, public are the endpoints that can be accessed without authentication. For didactical simplicity, we will do the access without authentication in this tutorial, but you can get more information about exposing endpoints with authentication in the official documentation ([link](https://postgrest.org/en/stable/references/auth.html)).
+PostgREST provides the functionality to expose public REST endpoints with anonymous access; this means that these endpoints can be accessed without authentication. For didactical simplicity, we will do the access without authentication in this tutorial, but you can get more information about exposing endpoints with authentication in the official documentation ([link](https://postgrest.org/en/stable/references/auth.html)).
 
 To activate the resource, it is necessary to define the ROLE of the database that will be used for this public access. Only resources accessible by this ANONYMOUS ROLE will be offered in the public version of the API.
 
@@ -135,7 +135,7 @@ PGRST_DB_ANON_ROLE = "api_anon_user"
 In addition to indicating the ROLE, it is necessary to create the respective role in the database.
 
 ```sql
--- Excerpt from sql/002_schema_api_anon_access.sql file
+-- Excerpt from sql/001_anon_user.sql file
 -- Creates the role api_anon_user
 CREATE ROLE api_anon_user nologin;
 
@@ -146,19 +146,19 @@ GRANT api_anon_user TO app_user;
 GRANT usage on schema public to api_anon_user;
 ```
 
-The steps for creating and populating the original table will be omitted from this tutorial, however it can be found in seven SQL scripts located in: [./sql](./sql/) folder.
+The steps for creating and populating the tables will be omitted from this tutorial. However, it can be found in seven SQL scripts in [./sql](./sql/) folder.
 
 Once that's done, it's ready! PostgREST automatically recognizes changes made to the database.
 
-## Adapting this template for your own database modeling
+## Adapting this template for your database modeling
 
 The technology stack described in this tutorial is capable of dynamically creating a complete REST API for any Postgres database. 
 
-In this template we use the docker entrypoint feature. This feature allows some content to run after container startup. In this direction, we mapped a volume that mounts the folder [./sql](./sql/) precisely at the entrypoint of the Postgres container.
+In this template, we use the docker entrypoint feature. This feature allows some content to run after container startup. In this direction, we mapped a volume that mounts the folder [./sql](./sql/) precisely at the entrypoint of the Postgres container.
 
-This way, ONLY on the first start, Postgres creates the entire file structure for its operation. After creating this structure, it will search the entrypoint folder for SQL files and execute them. In case of any error in the files the initialization is stopped.
+This way, ONLY on the first initialization, Postgres creates the entire files structure for its operation. After creating this structure, it will search the entrypoint folder for SQL files and execute them. In case of any error in the files, the initialization is stopped.
 
-To customize your database, I recommend that you fork this repository and change the SQL files as per your needs. So you will have a development environment that can be instantiated in seconds at any time. The second option is to connect to the database and make changes through a command prompt or GUI.
+To customize your database, I recommend that you fork this repository and change the SQL files as per your needs. So, you will have a development environment that can be instantiated in seconds at any time. The second option is to connect to the database and make changes through a command prompt or GUI.
 
 ## Good practices for exposing REST endpoints with PostgREST
 
