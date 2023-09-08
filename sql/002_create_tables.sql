@@ -46,13 +46,25 @@ COMMENT ON COLUMN "public"."projects"."description" IS 'Description of the proje
 
 COMMENT ON COLUMN "public"."tasks"."description" IS 'Description of the task';
 
-ALTER TABLE "public"."project_members" ADD FOREIGN KEY ("user_id") REFERENCES "public"."users" ("id");
+ALTER TABLE "public"."project_members" ADD CONSTRAINT project_members_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE;
 
-ALTER TABLE "public"."project_members" ADD FOREIGN KEY ("project_id") REFERENCES "public"."projects" ("id");
+ALTER TABLE "public"."project_members" ADD CONSTRAINT project_members_project_id_fkey FOREIGN KEY (project_id)
+        REFERENCES public.projects (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE;
 
-ALTER TABLE "public"."projects" ADD FOREIGN KEY ("manager_user_id") REFERENCES "public"."users" ("id");
+ALTER TABLE "public"."projects" ADD CONSTRAINT projects_manager_user_id_fkey FOREIGN KEY (manager_user_id)
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE SET NULL;
 
-ALTER TABLE "public"."tasks" ADD FOREIGN KEY ("project_id") REFERENCES "public"."projects" ("id");
+ALTER TABLE "public"."tasks" ADD CONSTRAINT tasks_project_id_fkey FOREIGN KEY (project_id)
+        REFERENCES public.projects (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE;
 
 ALTER TABLE "public"."tasks" ADD FOREIGN KEY ("task_type_id") REFERENCES "public"."task_types" ("id");
 
