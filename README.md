@@ -2,7 +2,7 @@
 
 This repository provides a functional template and a tutorial that allows you to build a REST API ecosystem in just 1 minute. 
 
-![](./doc/images/API-ecosystem-Postgrest-OverviewArchitecture.png "")
+![](https://github.com/luizsoliveira/jetstarter-api-postgrest/raw/main/doc/images/API-ecosystem-Postgrest-OverviewArchitecture.png "")
 
 *Figure 1. API overview ecosystem with Docker-compose, Postgres, PostgREST, and Swagger*
 
@@ -65,11 +65,11 @@ PostgREST allows you to deploy a robust REST API with the following functionalit
 
 ## Understanding what's behind the magic
 
-![](./doc/images/magic.gif "")
+![](https://github.com/luizsoliveira/jetstarter-api-postgrest/raw/main/doc/images/magic.gif "")
 
 According to the official [website](https://postgrest.org/en/stable/), PostgREST is a standalone web server that turns your PostgreSQL database directly into a RESTful API. The structural constraints and permissions in the database determine the API endpoints and operations.
 
-![](./doc/images/API-ecosystem-Postgrest-Workflow.png "")
+![](https://github.com/luizsoliveira/jetstarter-api-postgrest/raw/main/doc/images/API-ecosystem-Postgrest-Workflow.png "")
 *Figure 2. API development workflow with PostgREST*
 
 The strategy applied by PostgREST consists of the belief that the database has all the information about the model needed to generate the endpoints of a REST API. According to the creators, writing exclusive code for the API creates duplication of business rules or inconsistency with what was defined in the database.
@@ -78,19 +78,19 @@ With this principle in mind, PostgREST performs a robust introspection in the da
 
 Figure 2 illustrates the development flow of a REST API using the PostgREST + Swagger ecosystem. According to the workflow above, the only necessary code input is the SQL commands responsible for defining the relational model.
 
-![](./doc/images/physical-database-model.png "")
+![](https://github.com/luizsoliveira/jetstarter-api-postgrest/raw/main/doc/images/physical-database-model.png "")
 *Figure 3. Physical model of an example database*
 
 Figure 3 displays the physical model of the database used in this tutorial. Through the introspection of the structures present in the database, such as tables, columns, relationships, views, functions, and grant permissions, among others, PostgREST builds a cache that is used for the dynamic generation of structures that would be equivalent to the models and controllers writen by hand in a traditional API development. Note that in this approach, the database is not only limited to reliable data persistence but also performs the function of being the main source of knowledge from which all information about structures and access permissions can be obtained.
 
 For the implementation of CRUD endpoints, the effort is minimal, just modeling the structures in the database, which would already be done anyway. With only the input of SQLs, PostgREST can already offer the CRUD endpoints of each entity, as well as the technical description of the API in OpenAPI format. Finally, from this description, Swagger renders the documentation page (Figure 4).
 
-![](./doc/images/swagger-example.png "")
+![](https://github.com/luizsoliveira/jetstarter-api-postgrest/raw/main/doc/images/swagger-example.png "")
 *Figure 4. Swagger documentation page automatically generated from the database schema*
 
 ## PostgREST configuration
 
-![](./doc/images/API-ecosystem-Postgrest-Architecture.png "")
+![](https://github.com/luizsoliveira/jetstarter-api-postgrest/raw/main/doc/images/API-ecosystem-Postgrest-Architecture.png "")
 *Figure 4. API ecosystem architecture with Docker-compose, Postgres, PostgREST, and Swagger*
 
 Figure 4 illustrates a straightforward scenario used for teaching purposes in this article.
