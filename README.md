@@ -1,4 +1,4 @@
-# Rapid REST API development with PostgREST database (under construction...)
+# Rapid REST API development with PostgREST
 
 This repository provides a functional template and a tutorial that allows you to build a REST API ecosystem in just 1 minute. 
 
