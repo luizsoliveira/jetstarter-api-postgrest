@@ -3,7 +3,9 @@
 
 -- JWT from SQL
 
+--select * from current_setting('app.settings.jwt_secret') limit 1;
 ALTER DATABASE app_db SET "app.jwt_secret" TO 'reallyreallyreallyreallyverysafe';
+
 
 -- add type
 CREATE TYPE basic_auth.jwt_token AS (
@@ -24,7 +26,7 @@ begin
   end if;
 
   select jwt.sign(
-      row_to_json(r), current_setting('app.jwt_secret')
+      row_to_json(r), current_setting('APP.JWT_SECRET')
     ) as token
     from (
       select _role as role, login.email as email,
