@@ -154,11 +154,11 @@ Once that's done, it's ready! PostgREST automatically recognizes changes made to
 
 The technology stack described in this tutorial is capable of dynamically creating a complete REST API for any Postgres database. 
 
-In this template, we use the docker entrypoint feature. This feature allows some content to run after container startup. In this direction, we mapped a volume that mounts the folder [./sql](./sql/) precisely at the entrypoint of the Postgres container.
+In this template, we use the docker entry point feature. This feature allows some content to run after container startup. In this direction, we mapped a volume that mounts the folder [./sql](./sql/) precisely at the entry point of the Postgres container.
 
-This way, ONLY on the first initialization, Postgres creates the entire files structure for its operation. After creating this structure, it will search the entrypoint folder for SQL files and execute them. In case of any error in the files, the initialization is stopped.
+This way, ONLY on the first initialization, Postgres creates the entire files structure for its operation. After creating this structure, it will search the entry point folder for SQL files and execute them. In case of any error in the files, the initialization is stopped.
 
-To customize your database, I recommend that you fork this repository and change the SQL files as per your needs. So, you will have a development environment that can be instantiated in seconds at any time. The second option is to connect to the database and make changes through a command prompt or GUI.
+To customize your database, you can click on "Use this template" and select the option "Create a new repository". The GitHub will create a copy of this repository in your account and you can change the SQL files as per your needs. So, you will have a development environment that can be instantiated in seconds at any time. The second option is to connect to the database and make changes through a command prompt or GUI.
 
 ## Good practices for exposing REST endpoints with PostgREST
 
@@ -166,6 +166,6 @@ A beneficial practice is not to directly expose the table in the schema visible 
 
 The first advantage is that you can have the freedom to expose a subset of the data available in the table in the API, restricting, for example, that columns and/or rows of the table are not present in the view.
 
-The second advantage is that you can use this indirection to manage different API versions. You can have an api-1.0 schema and another api-2.0 schema. Both schemas can coexist by creating different views abstractions of the same database. This indirection provides the necessary freedom for database evolution while preserving support for legacy API versions.
+The second advantage is that you can use this indirection to manage different API versions. You can have an api-1.0 schema and another api-2.0 schema. Both schemas can coexist by creating different abstractions (using views) of the same database. This indirection provides the necessary freedom for database evolution while preserving support for legacy API versions.
 
 Once equipped with the original table, the next step is to create a view accessible as read-only by the ROLE api_anon_user. Remembering that even though it is a VIEW, it is still important to specify that access is read-only, as both Postgres and PostgREST support the [updatable views](https://www.postgresql.org/docs/current/sql-createview.html#SQL-CREATEVIEW-UPDATABLE-VIEWS) feature.
