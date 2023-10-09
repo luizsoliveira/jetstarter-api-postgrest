@@ -36,7 +36,9 @@ docker-compose up
 
 ```
 
-The sequence of commands above fetches the microservices/containers infrastructure shown in Figure 1. After downloading the images, the containers are initialized. During the Postgres first initialization, the SQL scripts inside the folder [./sql](./sql/) are executed. On the sequence, the PostgREST is started, and it automatically introspects the database to build a cache schema. Finally, the services are available at the following URLs:
+The sequence of commands above fetches the microservices/containers infrastructure shown in Figure 1. After downloading the images, the containers are initialized. During the Postgres first initialization, the SQL scripts inside the folder [./sql](./sql/) are executed. On the sequence, the PostgREST is started, and it automatically introspects the database to build a cache schema. 
+
+After this process, **in less than 1 minute** all services are available at the following URLs:
 
 * API documentation: http://localhost:8080/
 * OpenAPI description: http://localhost:3000/
